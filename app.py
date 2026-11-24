@@ -8,9 +8,9 @@ st.set_page_config(page_title="German Invoice Generator", layout="wide")
 st.title("German Invoice (Rechnung) Generator")
 st.caption("Automated German VAT (MwSt.) Calculation & Printable Invoice Builder — Python & Streamlit")
 
-# Initialize sample line items in session state so the preview works immediately
-if "items" not in st.session_state:
-    st.session_state.items = [
+# Initialize sample line items in session state (avoiding built-in dict method name 'items')
+if "line_items" not in st.session_state:
+    st.session_state.line_items = [
         {"description": "Python Backend & SQLite Integration (8 Std.)", "quantity": 8, "unit_price": 45.00},
         {"description": "Streamlit Dashboard Deployment & Testing", "quantity": 1, "unit_price": 180.00},
     ]
@@ -69,15 +69,15 @@ with left_col:
 
         if st.form_submit_button("Add Line Item"):
             if desc.strip():
-                st.session_state.items.append(
+                st.session_state.line_items.append(
                     {"description": desc.strip(), "quantity": int(qty), "unit_price": float(price)}
                 )
                 st.rerun()
             else:
                 st.error("Please enter a service or item description.")
 
-    if st.session_state.items:
-        for idx, item in enumerate(st.session_state.items):
+    if st.session_state.line_items:
+        for idx, item in enumerate(st.session_state.line_items):
             r1, r2 = st.columns([5, 1])
             with r1:
                 st.write(
@@ -86,18 +86,18 @@ with left_col:
                 )
             with r2:
                 if st.button("Remove", key=f"del_{idx}"):
-                    st.session_state.items.pop(idx)
+                    st.session_state.line_items.pop(idx)
                     st.rerun()
 
         if st.button("Clear All Items", type="secondary"):
-            st.session_state.items = []
+            st.session_state.line_items = []
             st.rerun()
 
 # --- RIGHT COLUMN: LIVE CALCULATIONS & PRINTABLE PREVIEW ---
 with right_col:
     st.subheader("3. Summary & Live Invoice Preview")
 
-    totals = inv.calculate_totals(st.session_state.items, tax_rate)
+    totals = inv.calculate_totals(st.session_state.line_items, tax_rate)
     k1, k2, k3 = st.columns(3)
     k1.metric("Nettobetrag (Net)", totals["net_formatted"])
     k2.metric(f"MwSt. ({tax_rate}%)", totals["tax_formatted"])
@@ -114,7 +114,7 @@ with right_col:
         "tax_id": tax_id,
         "tax_rate": tax_rate,
         "bank_details": bank_details,
-        "items": st.session_state.items,
+        "items": st.session_state.line_items,
     }
 
     html_invoice = inv.generate_invoice_html(invoice_payload)

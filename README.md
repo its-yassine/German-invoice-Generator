@@ -29,7 +29,7 @@ german_invoice_generator/
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/yvxxine/german_invoice_generator.git
+   git clone https://github.com/its-yassine/german_invoice_generator.git
    cd german_invoice_generator
    ```
 

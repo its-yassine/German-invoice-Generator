@@ -1,4 +1,6 @@
 # German Invoice (Rechnung) Generator
+<img width="1671" height="972" alt="image" src="https://github.com/user-attachments/assets/f14de0f9-57d0-471c-891b-9d1a2273ab24" />
+
 
 A web application built with **Python** and **Streamlit** that automates German VAT (*Mehrwertsteuer*) calculations, formats Euro currency according to German standards (`1.250,00 €`), and generates clean, printable HTML/PDF-ready invoices (*Rechnungen*).
 
